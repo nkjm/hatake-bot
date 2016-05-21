@@ -10,9 +10,9 @@ router.post('/callback', function(req, res, next) {
     console.log(req.body.result[0].content);
     var lineResponse = makeResponse(req.body.result[0].content);
     var headers = {
-        X-Line-ChannelID: "1468262145",
-        X-Line-ChannelSecret: "6ebec0057b2374dc28276ba0f00a1e96",
-        X-Line-Trusted-User-With-ACL: "u5811e3e3ba810b3c5d4ee96cf6e3ac2d"
+        "X-Line-ChannelID": "1468262145",
+        "X-Line-ChannelSecret": "6ebec0057b2374dc28276ba0f00a1e96",
+        "X-Line-Trusted-User-With-ACL": "u5811e3e3ba810b3c5d4ee96cf6e3ac2d"
     };
     var body = {
         to:["ud72461ced7e0bf1619cabf38fa313e0f"],
