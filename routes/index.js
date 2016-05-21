@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* Callback */
 router.post('/callback', function(req, res, next) {
-    console.log(req.body);
+    console.log(req.body.content);
     res.send(null);
 });
 
