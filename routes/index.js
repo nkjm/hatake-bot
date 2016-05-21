@@ -17,7 +17,7 @@ function makeResponse(message){
 /* Callback */
 router.post('/callback', function(req, res, next) {
     console.log(req.body.result[0].content);
-    var lineResponse = makeResponse(req.body.result[0].content);
+    var lineResponse = makeResponse(req.body.result[0].content.text);
     var headers = {
         'X-Line-ChannelID': "1468262145",
         'X-Line-ChannelSecret': "6ebec0057b2374dc28276ba0f00a1e96",
@@ -30,6 +30,7 @@ router.post('/callback', function(req, res, next) {
         eventType: "138311608800106203",
         content: {"contentType":1, "toType":1, "text": lineResponse}
     };
+    console.log(body);
     request({
         url: "https://trialbot-api.line.me/v1/events",
         method: "POST",
@@ -55,7 +56,7 @@ router.get('/sendMessage', function(req, res, next) {
         to: ["ud72461ced7e0bf1619cabf38fa313e0f"],
         toChannel: "1383378250",
         eventType: "138311608800106203",
-        content: {"contentType":1, "toType":1, "text": "HOGE!!!"}
+        content: {"contentType":1, "toType":1, "text": makeResponse("")}
     };
     request({
         url: "https://trialbot-api.line.me/v1/events",
