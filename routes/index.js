@@ -36,7 +36,7 @@ function makeResponse(message, callback){
                 callback("あれ、そういわれればどうなのかしら。自分で自分がわからないわ。");
             } else if (moisture <= hatakeConfig.moistureThresholdLow) {
                 callback("よくきいてくれた！正直かなり乾いています。");
-            } else if (moisture > hatakeConfig.moistureThresholdLow <= hatakeConfig.moistureThresholdHigh){
+            } else if (moisture > hatakeConfig.moistureThresholdLow && moisture <= hatakeConfig.moistureThresholdHigh){
                 callback("ちょうどいいくらいですよ。いつもこれくらいがいいな。");
             } else if (moisture > hatakeConfig.moistureThresholdHigh){
                 callback("いやー、じゃぶじゃぶですよ。");
