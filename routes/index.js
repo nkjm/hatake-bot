@@ -1,75 +1,111 @@
 var express = require('express');
 var router = express.Router();
 var request = require('request');
+var hatakeConfig = require('../config.js');
 
-function makeResponse(message){
+function getLatestMoisture(callback){
+    var headers = {
+        'Content-Type': "application/json"
+    };
+    request({
+        url: hatakeConfig.dbApiPrefix + "/log/latest",
+        method: "GET",
+        headers: headers
+    }, function (error, response, body) {
+        if (error) {
+            console.log(error);
+            callback("?");
+        } else {
+            console.log(JSON.parse(response.body));
+            callback(JSON.parse(response.body).moisture);
+        }
+    });
+}
+
+function makeResponse(message, callback){
     if (message.indexOf("おはよう") > -1) {
-        return "おはようございます！";
+        callback("おはようございます！");
     } else if (message.indexOf("こんにちは") > -1){
-        return "ああどうも、こんにちは。";
+        callback("ああどうも、こんにちは。");
     } else if (message.indexOf("こんばんは") > -1){
-        return "これはこれは。こんばんは。";
+        callback("これはこれは。こんばんは。");
+    } else if (message.indexOf("水分") > -1){
+        getLatestMoisture(function(moisture){
+            console.log(moisture);
+            if (moisture == "?"){
+                callback("あれ、そういわれればどうなのかしら。自分で自分がわからないわ。");
+            } else if (moisture <= hatakeConfig.moistureThresholdLow) {
+                callback("正直かなり乾いています。");
+            } else if (moisture > hatakeConfig.moistureThresholdLow <= hatakeConfig.moistureThresholdHigh){
+                callback("ちょうどいいくらいですよ。いつもこれくらいがいいな。");
+            } else if (moisture > hatakeConfig.moistureThresholdHigh){
+                callback("いやー、じゃぶじゃぶですよ。");
+            } else {
+                callback("あれ、そういわれればどうなのかしら。自分で自分がわからないわ。");
+            }
+        });
     } else {
-        return "は？";
+        callback("は？");
     }
 }
 
 /* Callback */
 router.post('/callback', function(req, res, next) {
-    console.log(req.body.result[0].content);
-    var lineResponse = makeResponse(req.body.result[0].content.text);
-    var headers = {
-        'X-Line-ChannelID': "1468262145",
-        'X-Line-ChannelSecret': "6ebec0057b2374dc28276ba0f00a1e96",
-        'X-Line-Trusted-User-With-ACL': "u5811e3e3ba810b3c5d4ee96cf6e3ac2d",
-        'Content-Type': "application/json"
-    };
-    var body = {
-        to:[req.body.result[0].content.from],
-        toChannel: "1383378250",
-        eventType: "138311608800106203",
-        content: {"contentType":1, "toType":1, "text": lineResponse}
-    };
-    console.log(body);
-    request({
-        url: "https://trialbot-api.line.me/v1/events",
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(body)
-    }, function (error, response, body) {
-        if (error || response.statusCode != 200) {
-            console.log(body);
-        }
+    makeResponse(req.body.result[0].content.text, function(lineResponse){
+        var headers = {
+            'X-Line-ChannelID': hatakeConfig.lineChannelId,
+            'X-Line-ChannelSecret': hatakeConfig.lineChannelSecret,
+            'X-Line-Trusted-User-With-ACL': hatakeConfig.lineMid,
+            'Content-Type': "application/json"
+        };
+        var body = {
+            to:[req.body.result[0].content.from],
+            toChannel: "1383378250",
+            eventType: "138311608800106203",
+            content: {"contentType":1, "toType":1, "text": lineResponse}
+        };
+        request({
+            url: "https://trialbot-api.line.me/v1/events",
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(body)
+        }, function (error, response, body) {
+            if (error || response.statusCode != 200) {
+                console.log(body);
+            }
+        });
+        res.send(null);
     });
-    res.send(null);
 });
 
 /* GET home page. */
 router.get('/sendMessage', function(req, res, next) {
-    var headers = {
-        'X-Line-ChannelID': "1468262145",
-        'X-Line-ChannelSecret': "6ebec0057b2374dc28276ba0f00a1e96",
-        'X-Line-Trusted-User-With-ACL': "u5811e3e3ba810b3c5d4ee96cf6e3ac2d",
-        'Content-Type': "application/json"
-    };
-    var body = {
-        to: ["ud72461ced7e0bf1619cabf38fa313e0f"],
-        toChannel: "1383378250",
-        eventType: "138311608800106203",
-        content: {"contentType":1, "toType":1, "text": makeResponse("")}
-    };
-    request({
-        url: "https://trialbot-api.line.me/v1/events",
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(body)
-    }, function (error, response, body) {
-        if (error || response.statusCode != 200) {
-            console.log(body);
-            //console.log(response);
-        }
+    makeResponse("現在の水分量はいかが？", function(lineResponse){
+        var headers = {
+            'X-Line-ChannelID': hatakeConfig.lineChannelId,
+            'X-Line-ChannelSecret': hatakeConfig.lineChannelSecret,
+            'X-Line-Trusted-User-With-ACL': hatakeConfig.lineMid,
+            'Content-Type': "application/json"
+        };
+        var body = {
+            to: [hatakeConfig.hatakeOwnerLineMid],
+            toChannel: "1383378250",
+            eventType: "138311608800106203",
+            content: {"contentType":1, "toType":1, "text": lineResponse}
+        };
+        request({
+            url: "https://trialbot-api.line.me/v1/events",
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(body)
+        }, function (error, response, body) {
+            if (error || response.statusCode != 200) {
+                console.log(body);
+                //console.log(response);
+            }
+        });
+        res.send(null);
     });
-    res.send(null);
 });
 
 /* GET home page. */
