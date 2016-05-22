@@ -29,7 +29,9 @@ function makeResponse(message, callback){
         callback("ああどうも、こんにちは。");
     } else if (message.indexOf("こんばんは") > -1){
         callback("これはこれは。こんばんは。");
-    } else if (message.indexOf("水分") > -1){
+    } else if (message.indexOf("どうも") > -1 || message.indexOf("ども") > -1){
+        callback("どうも〜。");
+    } else if (message.indexOf("水分") > -1 || message.indexOf("調子") > -1) {
         getLatestMoisture(function(moisture){
             console.log(moisture);
             if (moisture == "?"){
@@ -45,7 +47,7 @@ function makeResponse(message, callback){
             }
         });
     } else {
-        callback("は？");
+        callback("えーと、どうかなー。");
     }
 }
 
