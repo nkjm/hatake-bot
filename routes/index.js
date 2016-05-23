@@ -16,7 +16,6 @@ function getLatestMoisture(callback){
             console.log(error);
             callback("?");
         } else {
-            console.log(JSON.parse(response.body));
             if (response.body && JSON.parse(response.body).items && JSON.parse(response.body).items.length == 1){
                 callback(JSON.parse(response.body).items[0].moisture);
             } else {
