@@ -17,7 +17,11 @@ function getLatestMoisture(callback){
             callback("?");
         } else {
             console.log(JSON.parse(response.body));
-            callback(JSON.parse(response.body).moisture);
+            if (response.body && JSON.parse(response.body).moisture){
+                callback(JSON.parse(response.body).moisture);
+            } else {
+                callback("うーむ、ちょっと調べてみましたが、状況わかりませんでした。");
+            }
         }
     });
 }
