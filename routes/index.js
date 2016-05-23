@@ -16,9 +16,8 @@ function getLatestMoisture(callback){
             console.log(error);
             callback("?");
         } else {
-            console.log(JSON.parse(response.body));
-            if (response.body && JSON.parse(response.body).moisture){
-                callback(JSON.parse(response.body).moisture);
+            if (response.body && response.body.items && response.body.items.length == 1){
+                callback(JSON.parse(response.body.items[0]).moisture);
             } else {
                 callback("うーむ、ちょっと調べてみましたが、状況わかりませんでした。");
             }
