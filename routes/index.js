@@ -19,7 +19,7 @@ function getLatestMoisture(callback){
             if (response.body && response.body.items && response.body.items.length == 1){
                 callback(JSON.parse(response.body.items[0]).moisture);
             } else {
-                callback("うーむ、ちょっと調べてみましたが、状況わかりませんでした。");
+                callback("?");
             }
         }
     });
@@ -38,7 +38,7 @@ function makeResponse(message, callback){
         getLatestMoisture(function(moisture){
             console.log(moisture);
             if (moisture == "?"){
-                callback("あれ、そういわれればどうなのかしら。自分で自分がわからないわ。");
+                callback("うーむ、ちょっと調べてみましたが、状況わかりませんでした。");
             } else if (moisture <= hatakeConfig.moistureThresholdLow) {
                 callback("よくきいてくれた！正直かなり乾いています。");
             } else if (moisture > hatakeConfig.moistureThresholdLow && moisture <= hatakeConfig.moistureThresholdHigh){
@@ -46,7 +46,7 @@ function makeResponse(message, callback){
             } else if (moisture > hatakeConfig.moistureThresholdHigh){
                 callback("いやー、じゃぶじゃぶですよ。");
             } else {
-                callback("あれ、そういわれればどうなのかしら。自分で自分がわからないわ。");
+                callback("うーむ、ちょっと調べてみましたが、状況わかりませんでした。");
             }
         });
     } else {
