@@ -36,7 +36,6 @@ function makeResponse(message, callback){
         callback("どうも〜。");
     } else if (message.indexOf("水") > -1 || message.indexOf("調子") > -1 || message.indexOf("どう？") > -1) {
         getLatestMoisture(function(moisture){
-            console.log(moisture);
             if (moisture == "?"){
                 callback("うーむ、ちょっと調べてみましたが、状況わかりませんでした。");
             } else if (moisture <= hatakeConfig.moistureThresholdLow) {
@@ -65,8 +64,8 @@ router.post('/callback', function(req, res, next) {
         };
         var body = {
             to:[req.body.result[0].content.from],
-            toChannel: "1383378250",
-            eventType: "138311608800106203",
+            toChannel: "1383378250", // 固定の値
+            eventType: "138311608800106203", // 固定の値
             content: {"contentType":1, "toType":1, "text": lineResponse}
         };
         request({
@@ -83,7 +82,7 @@ router.post('/callback', function(req, res, next) {
     });
 });
 
-/* GET home page. */
+/*
 router.get('/sendMessage', function(req, res, next) {
     makeResponse("現在の水分量はいかが？", function(lineResponse){
         var headers = {
@@ -112,10 +111,6 @@ router.get('/sendMessage', function(req, res, next) {
         res.send(null);
     });
 });
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+*/
 
 module.exports = router;
