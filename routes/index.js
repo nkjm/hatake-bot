@@ -49,7 +49,7 @@ function makeResponse(message, callback){
             }
         });
     } else {
-        callback("えーと・・・");
+        callback("は？");
     }
 }
 
