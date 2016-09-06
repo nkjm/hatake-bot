@@ -107,12 +107,12 @@ module.exports = class LineBot {
                     break;
                 case "get-latest-light":
                     // 仮の実装で固定の値を常に返しています。本来は照度センサーの値を取得してレスポンスを設定するイメージです。
-                    responseText = "ちょっと薄暗いですね。";
+                    responseText = "いやー、日差しはきついですね。帽子かぶりたいくらいです。";
                     that.postLineMessage(chatId, responseText);
                     break;
                 case "get-latest-nutrition":
                     // 仮の実装で固定の値を常に返しています。本来は土壌養分の値を取得してレスポンスを設定するイメージです。
-                    responseText = "もうちょっと肥えを足してもらえますか？";
+                    responseText = "肥え、プリーズ。";
                     that.postLineMessage(chatId, responseText);
                     break;
                 case "get-latest-soil":
