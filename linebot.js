@@ -291,10 +291,13 @@ module.exports = class LineBot {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + LINE_CHANNEL_ACCESS_TOKEN
         };
+
         let body = {
             replyToken: replyToken,
             messages: [message]
         }
+        console.log(headers);
+        console.log(body);
         let url = 'https://api.line.me/v2/bot/message/reply';
         request({
             url: url,
