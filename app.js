@@ -11,9 +11,6 @@ const app = express();
 
 // -----------------------------------------------------------------------------
 // ミドルウェア設定
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json({
     verify: function(req, res, buf, encoding) {
         req.rawBody = buf;
