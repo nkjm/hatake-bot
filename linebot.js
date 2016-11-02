@@ -309,7 +309,12 @@ module.exports = class LineBot {
             body: body,
             json: true
         }, function (error, response, body) {
-            (error) ? console.log(error) : console.log('Line reply sent.');
+            if (error || response.statusCode != 200){
+                console.log('Failed to reply Line Message.');
+                if (error) ? console.log(error);
+                return;
+            }
+            console.log('Line reply sent.');
         });
     }
 
@@ -333,7 +338,12 @@ module.exports = class LineBot {
             body: body,
             json: true
         }, function (error, response, body) {
-            (error) ? console.log(error) : console.log('Line message sent.');
+            if (error || response.statusCode != 200){
+                console.log('Failed to send Line Message.');
+                if (error) ? console.log(error);
+                return;
+            }
+            console.log('Line Message sent.');
         });
     }
 
