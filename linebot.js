@@ -294,7 +294,10 @@ module.exports = class LineBot {
 
         let body = {
             replyToken: replyToken,
-            messages: [message]
+            messages: [{
+                type: "text",
+                text: message
+            ]}
         }
         console.log(headers);
         console.log(body);
@@ -317,7 +320,10 @@ module.exports = class LineBot {
         };
         let body = {
             to: to,
-            messages: [message]
+            messages: [{
+                type: "text",
+                text: message
+            ]}
         }
         let url = 'https://api.line.me/v2/bot/message/push';
         request({
