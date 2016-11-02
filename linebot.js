@@ -297,7 +297,7 @@ module.exports = class LineBot {
             messages: [{
                 type: "text",
                 text: message
-            ]}
+            }]
         }
         console.log(headers);
         console.log(body);
@@ -311,7 +311,7 @@ module.exports = class LineBot {
         }, function (error, response, body) {
             if (error || response.statusCode != 200){
                 console.log('Failed to reply Line Message.');
-                if (error) ? console.log(error);
+                console.log(error);
                 return;
             }
             console.log('Line reply sent.');
@@ -328,7 +328,7 @@ module.exports = class LineBot {
             messages: [{
                 type: "text",
                 text: message
-            ]}
+            }]
         }
         let url = 'https://api.line.me/v2/bot/message/push';
         request({
@@ -340,7 +340,7 @@ module.exports = class LineBot {
         }, function (error, response, body) {
             if (error || response.statusCode != 200){
                 console.log('Failed to send Line Message.');
-                if (error) ? console.log(error);
+                console.log(error);
                 return;
             }
             console.log('Line Message sent.');
