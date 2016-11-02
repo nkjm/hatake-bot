@@ -24,6 +24,7 @@ router.post('/', (req, res) => {
         for (let botEvent of req.body.events){
             // 受信したメッセージをGoogle Translate APIで英語に翻訳。
             if (botEvent.type == "message"){
+                console.log("Got message from " + botEvent.source.userId);
                 googleTranslate.translate(botEvent.message.text, 'en', function(err, translation) {
                     if (err){
                         console.log(err);
@@ -46,8 +47,7 @@ router.post('/', (req, res) => {
         }
 
     } catch (err) {
-        res.status(400).send('Error while processing ' + err.message);
-        return;
+        console.log(err);
     }
 
     res.status(200).end();
